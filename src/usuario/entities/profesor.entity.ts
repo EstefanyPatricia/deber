@@ -1,10 +1,13 @@
-import { Column, Entity, JoinTable, ManyToMany } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 import { UsuarioEntity } from "./usuario.entity";
 import { AlumnoEntity } from "./alumno.entity";
 
 @Entity('profesor')
 export class ProfesorEntity extends UsuarioEntity {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
     @Column()
     asignaruta: string;
 
@@ -15,6 +18,5 @@ export class ProfesorEntity extends UsuarioEntity {
     registroAsistencias: boolean
 
     @ManyToMany(() => AlumnoEntity, (alumno) => alumno.profesores)
-    @JoinTable()
     alumnos: AlumnoEntity[]
 }

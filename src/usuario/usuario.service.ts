@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { Delete, Injectable } from '@nestjs/common';
+import { AlumnoDto } from './dto/alumno-dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AlumnoEntity } from './entities/alumno.entity';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { UpdateAlumnoDto } from './dto/update-alumno-dto';
 
 @Injectable()
-export class UsuarioService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+export class AlumnoService {
+  constructor (@InjectRepository(AlumnoEntity) private alumnoRepostory: Repository<AlumnoEntity>){}
+
+  async create(alumnoDto: AlumnoDto):Promise<AlumnoEntity> {
+    const alumno: AlumnoEntity = await this.alumnoRepostory.save(alumnoDto);
+        return alumno;
+        //se guada en la bd la variable que se crea en la variable de la funcion
   }
 
-  findAll() {
-    return `This action returns all usuario`;
+  async findAll() :Promise<AlumnoEntity [] >{
+    const alumno: AlumnoEntity [] = await this.alumnoRepostory.find();
+        return alumno;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async findOne(id: string) :Promise<AlumnoEntity> {
+    const alumno: AlumnoEntity = await this.alumnoRepostory.findOneBy({id});
+        return alumno;
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async update(id: string, updateAlumno: UpdateAlumnoDto) :Promise<UpdateResult | undefined> {
+    const alumno: UpdateResult = await this.alumnoRepostory.update(id, updateAlumno);
+        return alumno;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async remove(id: string) :Promise<DeleteResult | undefined> {
+    const alumno: DeleteResult = await this.alumnoRepostory.delete(id);
+        return alumno;
   }
 }
+
+
